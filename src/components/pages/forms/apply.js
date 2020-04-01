@@ -12,7 +12,7 @@ export default {
       const formId = this.$router.currentRoute.params.form_id
       try {
         this.$data.working = true
-        await axios.post(`${API}/paro_proj/${formId}`, data)
+        await axios.post(`${API}/forms/${formId}`, data)
         this.$store.dispatch('toast', { message: 'Uloženo', type: 'success' })
         // this.$router.push(`/paro/${callId}`)
       } catch (e) {

@@ -27,6 +27,7 @@ const router = new VueRouter({
 })
 
 const store = Store(router)
+store.dispatch('init')
 
 new Vue({
   router,

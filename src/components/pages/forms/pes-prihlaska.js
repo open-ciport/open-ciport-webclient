@@ -34,7 +34,7 @@ export default Vue.extend({
   props: ['working', 'save', 'cancel'],
   template: `
   <div>
-    <h1>Poplatek ze psů</h1>
+    <h1>Přihlášení psa</h1>
     <form>
       <div class="row">
         <div class="col">

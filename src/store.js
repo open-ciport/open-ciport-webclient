@@ -1,22 +1,15 @@
-/* global Vue, Vuex, localStorage, API, axios, prompt */
-
-const KEY = '_opencomm_user_'
-const savedUser = localStorage.getItem(KEY)
+/* global Vue, Vuex, API, axios */
 
 export default function (router) {
   const store = new Vuex.Store({
     state: {
-      user: savedUser && JSON.parse(savedUser)
+      user: null
     },
     mutations: {
-      logout: async state => {
-        await axios.post(`${API}/logout`)
+      logout: state => {
         state.user = null
-        localStorage.removeItem(KEY)
-        router.push('/')
       },
-      login: (state, profile) => {
-        localStorage.setItem(KEY, JSON.stringify(profile))
+      profile: (state, profile) => {
         state.user = profile
       }
     },
@@ -24,19 +17,17 @@ export default function (router) {
       toast: function (ctx, opts) {
         Vue.$toast.open(opts)
       },
-      login: async function (ctx, opts) {
-        const uname = prompt('username')
-        if (!uname) return
-        const url = 'https://testauth22.herokuapp.com/success/'
-        let res = await axios.post(url, { uname, passwd: 'passwd' }, {
-          withCredentials: false
-        })
-        res = await axios.post(`${API}/login`, null, {
-          headers: {
-            Authorization: `JWT ${res.data}`
-          }
-        })
-        this.commit('login', res.data.user)
+      login: function (ctx, opts) {
+        window.location.href = `${API}/login`
+      },
+      logout: async state => {
+        window.location.href = `${API}/logout`
+      },
+      init: async function (ctx, opts) {
+        try {
+          const res = await axios.get(`${API}/profile`)
+          this.commit('profile', res.data.user)
+        } catch (_) {}
       }
     }
   })
@@ -46,11 +37,11 @@ export default function (router) {
     function (error) {
       switch (error.response.status) {
         case 401:
-          store.commit('logout')
           store.dispatch('toast', {
             message: 'Přihlášení vypršelo',
             type: 'success'
           })
+          store.dispatch('login')
           throw error
         default:
           throw error
