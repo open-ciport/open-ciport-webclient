@@ -1,6 +1,4 @@
-/* global axios, API, _, moment */
-import ProjectStatus from './parts/projectstatus.js'
-import VoteButton from './parts/votebutton.js'
+/* global axios, API, moment */
 
 export default {
   data: () => {
@@ -17,8 +15,8 @@ export default {
     fetchData: async function () {
       const callId = this.$router.currentRoute.params.call_id
       const promises = [
-        axios.get(`${API}/project/?call_id=${callId}`),
-        axios.get(`${API}/call/?id=${callId}`)
+        axios.get(`${API}/paro/project/?call_id=${callId}`),
+        axios.get(`${API}/paro/call/?id=${callId}`)
       ]
       const res = await Promise.all(promises)
       this.$data.projects = res[0].data

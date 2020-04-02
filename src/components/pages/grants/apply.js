@@ -1,6 +1,6 @@
-/* global axios, API, Vue */
-import BudgetEditor from './parts/budgeteditor.js'
-import { countTotal } from './parts/budgeteditor.js'
+/* global axios, API, Vue, _ */
+import EditorPrijmu from './parts/editor_prijmu.js'
+import { countTotal } from './parts/editor_prijmu.js'
 
 const validationMixin = window.vuelidate.validationMixin
 const validators = window.validators
@@ -17,8 +17,9 @@ export default Vue.extend({
       ukonceni: '1.2.2020',
       desc: '',
       content: '',
-      budget: '',
-      total: ''
+      prijmy: '',
+      naklady: '33',
+      pozadovanadotace: ''
     }
   },
   validations: {
@@ -34,7 +35,7 @@ export default Vue.extend({
       required: validators.required,
       maxLength: validators.maxLength(512)
     },
-    budget: {
+    prijmy: {
       itemsrequired: function (value) {
         try {
           const items = JSON.parse(value)
@@ -74,8 +75,8 @@ export default Vue.extend({
       return this.save()
     },
     save: async function () {
-      const model = this.$data
-      model.total = countTotal(model.budget)
+      const model = _.omit(this.$data, 'working')
+      model.pozadovanadotace = countTotal(model.budget)
       try {
         this.$data.working = true
         const callId = this.$router.currentRoute.params.call_id
@@ -89,7 +90,7 @@ export default Vue.extend({
           message: 'Uloženo',
           type: 'success'
         })
-        this.$router.push(`/granty/${callId}`)
+        this.$router.push(`/granty/vyzva/${callId}`)
       } catch (e) {
         this.$store.dispatch('toast', { message: e, type: 'error' })
         console.log(e)
@@ -99,7 +100,7 @@ export default Vue.extend({
     }
   },
   components: {
-    budgeteditor: BudgetEditor
+    editorprijmu: EditorPrijmu
   },
   template: `
   <div>
@@ -173,14 +174,14 @@ export default Vue.extend({
           </b-form-group>
 
           <b-form-group
-            :state="!$v.budget.$error"
-            label="Rozpočet projektu, opřený o nějakou referenci (eshop, konzultace se řemeslníkem)"
-            label-for="budget-input"
+            :state="!$v.prijmy.$error"
+            label="Seznam příjmů projektu"
+            label-for="prijmy-input"
             invalid-feedback="Rozpočet projektu je povinný a musí být maximílně 128 znaků dlouhý"
           >
-            <budgeteditor v-model="$v.budget.$model"></budgeteditor>
+            <editorprijmu v-model="$v.prijmy.$model"></editorprijmu>
             <template slot="invalid-feedback">
-              Musíte zmínit jaké dílčí položky projekt vyžaduje.
+              Jaké má projekt přijmy je povinná položka.
             </template>
           </b-form-group>
 
