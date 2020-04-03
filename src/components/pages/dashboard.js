@@ -21,10 +21,13 @@ export default {
     <div class="card-group">
 
       <div class="card">
+        <div style="font-size: 5em; align: center;">
+          <i class="fas fa-file-invoice-dollar"></i>
+        </div>
         <div class="card-body">
           <h5 class="card-title">Granty</h5>
           <p class="card-text">
-            <router-link to="/granty">
+            <router-link :to="{name: 'grants'}">
               <i class="fas fa-check"></i> Více ...
             </router-link>
           </p>
@@ -32,11 +35,15 @@ export default {
       </div>
 
       <div class="card">
-        <img class="card-img-top" alt="ikona anketa" src="anketa.jpg">
+        <div style="font-size: 5em; align: center;">
+          <i class="fas fa-archive"></i>
+        </div>
         <div class="card-body">
-          <h5 class="card-title">Informace o občanovi</h5>
+          <h5 class="card-title">Formuláře</h5>
           <p class="card-text">
-            Tuto sekci připravujeme.
+            <router-link :to="{name: 'formlist'}">
+              <i class="fas fa-check"></i> Více ...
+            </router-link>
           </p>
         </div>
       </div>

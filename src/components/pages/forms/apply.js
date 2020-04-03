@@ -7,6 +7,15 @@ export default {
       working: false
     }
   },
+  computed: {
+    items: function () {
+      return [
+        { text: 'Domů', to: { name: 'home' } },
+        { text: 'Formuláře', to: { name: 'formlist' } },
+        { text: 'Žádost', active: true }
+      ]
+    }
+  },
   methods: {
     save: async function (data) {
       const formId = this.$router.currentRoute.params.form_id
@@ -31,6 +40,7 @@ export default {
   },
   template: `
   <div>
+    <b-breadcrumb :items="items"></b-breadcrumb>
     <pesprihlaska v-bind:save="save" v-bind:cancel="cancel" @working="working">
     </pesprihlaska>
   </div>

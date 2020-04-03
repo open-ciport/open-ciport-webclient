@@ -22,7 +22,7 @@ const router = new VueRouter({
 
     { path: '/form', component: FormList, name: 'formlist' },
     { path: '/form/:form_id', component: Form, name: 'form' },
-    { path: '', component: Dashboard }
+    { path: '', component: Dashboard, name: 'home' }
   ]
 })
 
